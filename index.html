@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Weather</h1>
+    <input type="text" name="" id="city" />
+    <button id="show_weather">Show weather</button>
+    <div id="weather"></div>
+
+    <script>
+      $("#show_weather").click(function () {
+        let city = $("#city").val();
+        $("#city").val("");
+        //alert(q);
+        if (city.trim() == "") {
+          alert("Write City");
+        }
+        $.getJSON(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=e4934832971e6a5e25bf6d902224cdf7`,
+          function (result) {
+            $("#weather").append(
+              `<div">Weather - ${result.weather[0].main}; ${result.weather[0].description}</div> </br>`
+            );
+            $("#weather").append(
+              `<div">Temperature - ${result.main.temp}; min - ${result.main.temp_min}; max - ${result.main.temp_max}</div> </br>`
+            );
+            $("#weather").append(
+              `<div">Wind: speed - ${result.wind.speed}; direction - ${result.wind.deg}</div> </br>`
+            );
+            $("#weather").append(
+              `<div">Clouds - ${result.clouds.all}%</div> </br>`
+            );
+            $("#weather").append(
+              `<div">Location - ${result.coord.lat} : ${result.coord.lon}</div>  </br>`
+            );
+            $("#weather").append(
+              `<div">Sunrise time - ${result.sys.sunrise} Sunset time - ${result.sys.sunset}</div>`
+            );
+
+            // $.each(result, function (i, field) {
+            //     $("#weather").append(`i ${field.name} ${field.author}  <br>`);
+            // });
+          }
+        );
+      });
+    </script>
+  </body>
+</html>
