@@ -25,6 +25,7 @@
         $.getJSON(
           `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=e4934832971e6a5e25bf6d902224cdf7`,
           function (result) {
+            $("#weather").empty();
             $("#weather").append(
               `<div">Weather - ${result.weather[0].main}; ${result.weather[0].description}</div> </br>`
             );
