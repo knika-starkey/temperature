@@ -18,39 +18,80 @@
       $("#show_weather").click(function () {
         let city = $("#city").val();
         $("#city").val("");
-        //alert(q);
-        if (city.trim() == "") {
-          alert("Write City");
-        }
-        $.getJSON(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=e4934832971e6a5e25bf6d902224cdf7`,
-          function (result) {
-            $("#weather").empty();
-            $("#weather").append(
-              `<div">Weather - ${result.weather[0].main}; ${result.weather[0].description}</div> </br>`
-            );
-            $("#weather").append(
-              `<div">Temperature - ${result.main.temp}; min - ${result.main.temp_min}; max - ${result.main.temp_max}</div> </br>`
-            );
-            $("#weather").append(
-              `<div">Wind: speed - ${result.wind.speed}; direction - ${result.wind.deg}</div> </br>`
-            );
-            $("#weather").append(
-              `<div">Clouds - ${result.clouds.all}%</div> </br>`
-            );
-            $("#weather").append(
-              `<div">Location - ${result.coord.lat} : ${result.coord.lon}</div>  </br>`
-            );
-            $("#weather").append(
-              `<div">Sunrise time - ${result.sys.sunrise} Sunset time - ${result.sys.sunset}</div>`
-            );
+        ("use srtrict");
+        ("use srtrict");
 
-            // $.each(result, function (i, field) {
-            //     $("#weather").append(`i ${field.name} ${field.author}  <br>`);
-            // });
+        const weatherBlock = document.querySelector("#weather");
+
+        async function loadWeather(event) {
+          weatherBlock.innerHTML = `
+    <div class="weather_loading"><img class="loader" src="./images/loader.gif" alt=""></div>
+    `;
+          const server = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=e4934832971e6a5e25bf6d902224cdf7`;
+
+          const response = await fetch(server, { method: "GET" });
+          const responseResult = await response.json();
+
+          if (response.ok) {
+            getWeather(responseResult);
+          } else {
+            weatherBlock.innerHTML = responseResult.message;
           }
-        );
+        }
+
+        //alert(q);
+        // if (city.trim() == "") {
+        //   alert("Write City");
+        // }
+        // `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=e4934832971e6a5e25bf6d902224cdf7`,
+        function getWeather(data) {
+          //console.log(data);
+          const template = `
+    <div id="city"><h2>${data.name}</h2></div>
+    <div id="temp">Temperature -${data.main.temp}; min - ${data.main.temp_min}; max - ${data.main.temp_max}</</div>
+    <div id="icon"><img src="https://api.openweathermap.org/img/w/${data.weather[0].icon}.png" alt=""></div>
+    <div>Wind: speed - ${data.wind.speed}; direction - ${data.wind.deg}</div>
+    <div>Clouds - ${data.clouds.all}%</div> </br>
+    <div>Location - ${data.coord.lat} : ${data.coord.lon}</div>
+    <div>Sunrise time - ${data.sys.sunrise} Sunset time - ${data.sys.sunset}</div>
+
+    `;
+          weatherBlock.innerHTML = template;
+        }
+
+        if (weatherBlock) {
+          loadWeather();
+        }
       });
+      //     function (data) {
+      //       $("#weather").empty();
+      //       $("#weather").append(
+      //         `<div id="icon"><img src="https://api.openweathermap.org/img/w/${data.weather[0].icon}.png" alt=""></div>`
+      //       );
+      //       $("#weather").append(
+      //         `<div">Weather - ${data.weather[0].main}; ${data.weather[0].description}</div> </br>`
+      //       );
+      //       $("#weather").append(
+      //         `<div">Temperature - ${data.main.temp}; min - ${data.main.temp_min}; max - ${data.main.temp_max}</div> </br>`
+      //       );
+      //       $("#weather").append(
+      //         `<div">Wind: speed - ${data.wind.speed}; direction - ${data.wind.deg}</div> </br>`
+      //       );
+      //       $("#weather").append(
+      //         `<div">Clouds - ${data.clouds.all}%</div> </br>`
+      //       );
+      //       $("#weather").append(
+      //         `<div">Location - ${data.coord.lat} : ${data.coord.lon}</div>  </br>`
+      //       );
+      //       $("#weather").append(
+      //         `<div">Sunrise time - ${data.sys.sunrise} Sunset time - ${data.sys.sunset}</div>`
+      //       );
+
+      //       // $.each(data, function (i, field) {
+      //       //     $("#weather").append(`i ${field.name} ${field.author}  <br>`);
+      //       // });
+      //     };
+      // });
     </script>
   </body>
 </html>
